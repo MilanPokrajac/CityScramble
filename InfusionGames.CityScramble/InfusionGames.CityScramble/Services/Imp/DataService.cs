@@ -21,7 +21,11 @@ namespace InfusionGames.CityScramble.Services
 
         public async Task<Profile> GetProfileAsync()
         {
-            throw new NotImplementedException("GetProfileAsync");
+            var profile = new Profile();
+            profile.GoogleAuthToken = _client.CurrentUser.MobileServiceAuthenticationToken;
+            profile.Id = _client.CurrentUser.UserId;
+            
+            return profile;
         }
 
         public async Task<Team> JoinTeamAsync(string teamCode)

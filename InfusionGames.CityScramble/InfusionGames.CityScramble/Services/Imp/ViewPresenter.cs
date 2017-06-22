@@ -53,9 +53,22 @@ namespace InfusionGames.CityScramble.Services
         public void ShowLogin()
         {
             EnsureMainStackInitialized<LoginView>();
-
+            
             ActivePage = _mainStack;
+              
         }
+
+        public async void ShowStartPage()
+        {
+            //if(await _authService.IsLoggedInAsync())
+            //{
+               // ShowMainNavStack();
+            //}else
+            //{
+                ShowLogin();
+            //}
+        }
+
 
         private void EnsureMainStackInitialized<T>()
         {

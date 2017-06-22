@@ -44,7 +44,7 @@ namespace InfusionGames.CityScramble
             container.Singleton<ViewPresenter>();
 
             // ask the viewpresenter to display the first view (synchronously)
-            IoC.Get<ViewPresenter>().ShowLogin();
+            IoC.Get<ViewPresenter>().ShowStartPage();
             
         }
 
