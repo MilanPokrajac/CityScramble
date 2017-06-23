@@ -45,6 +45,8 @@ namespace InfusionGames.CityScramble.ViewModels
 			base.OnActivate();
 		}
 
+
+        //Note(Mykola): Triggered when we are pressing on the Login By Using Google button.
         private async void Login()
         {
             // TODO: Trigger authentication flow
@@ -52,6 +54,8 @@ namespace InfusionGames.CityScramble.ViewModels
             {
                 await _navigationService.NavigateToViewModelAsync<RaceSelectionViewModel>();
             }
+
+            // I guess here we should determine logic which will send user to the team joining page right after login in.
             
         }
 

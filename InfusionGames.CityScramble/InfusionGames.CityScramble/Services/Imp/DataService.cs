@@ -7,6 +7,7 @@ using InfusionGames.CityScramble.Models;
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Newtonsoft.Json.Linq;
 
 namespace InfusionGames.CityScramble.Services
 {
@@ -19,17 +20,43 @@ namespace InfusionGames.CityScramble.Services
             _client = client;
         }
 
+        private async Task<Profile> _getProfileFromScrambleService() {
+            Profile localProfile = null;
+            try
+            {
+                // fetching data from the city scrumble service about the user.
+                // checked the exception data, https://infusionamazingrace.azure-mobile.net/api/ will be attached to our request url
+                JToken res = await _client.InvokeApiAsync("profile", HttpMethod.Get, null); //this one returns user data.
+
+                localProfile = res.ToObject<Profile>();
+
+                var a = 1;
+            }
+            catch (Exception ex)
+            {
+                var a = ex;
+            }
+
+            return localProfile;
+        }
+
         public async Task<Profile> GetProfileAsync()
         {
+            //NOTE(Mykola): During auth this method is called first, then called AuthenticationService.GetProfileAndSaveItToSettings()
             var profile = new Profile();
+
+            //looks like next to lines are unnecessary
             profile.GoogleAuthToken = _client.CurrentUser.MobileServiceAuthenticationToken;
             profile.Id = _client.CurrentUser.UserId;
-            
+
+            profile = await _getProfileFromScrambleService();
+
             return profile;
         }
 
         public async Task<Team> JoinTeamAsync(string teamCode)
         {
+
             throw new NotImplementedException("JoinTeamAsync");
         }
 
@@ -164,5 +191,20 @@ namespace InfusionGames.CityScramble.Services
             throw new NotImplementedException("DeletePushRegistration");
         }
 
+        public async Task<IEnumerable<Team>> GetTeams()
+        {
+            JToken token = null;
+            try { 
+                token = await _client.InvokeApiAsync("teams", HttpMethod.Get, null);
+            } catch (Exception ex)
+            {
+                var a = ex;
+                var b = 1;
+            }
+            IEnumerable<Team> team = token?.ToObject<IEnumerable<Team>>();
+
+            return team;
+            //throw new NotImplementedException();
+        }
     }
 }

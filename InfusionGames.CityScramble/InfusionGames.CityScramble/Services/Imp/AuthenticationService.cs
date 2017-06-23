@@ -4,6 +4,10 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
 using Xamarin.Auth;
 using Xamarin.Forms;
+using InfusionGames.CityScramble.Models;
+using System.Net;
+using System.Json;
+using System.IO;
 
 namespace InfusionGames.CityScramble.Services
 {
@@ -104,13 +108,30 @@ namespace InfusionGames.CityScramble.Services
 
             _authenticator.Logout();
         }
+        
 
         private async Task GetProfileAndSaveItToSettings()
         {
+            //NOTE(Mykola): fetch data from google, I assume that we should fetch them from the our server.
             var profile = await _dataService.GetProfileAsync();
+
+            // var jsonProfile = await GetProfileFromCityScrumbleService("https://infusionamazingrace.azure-mobile.net/api/profile");
+
             if (profile != null)
             {
                 _settingsService.UserName = profile.DisplayName;
+                // is that a correct logic ???? in the settingsService we have only field for storing information about one team, but there are also setValue method which accept key-value 
+                if (profile.Teams?.Length > 0) {
+                    _settingsService.MyTeamId = profile.Teams[0].Id;
+                    _settingsService.MyTeamName = profile.Teams[0].Name;
+                }
+
+                //IS THAT AZURE REGISTRATION ID?
+                _settingsService.AzureRegistrationId = profile.Id;
+
+                _settingsService.SetValue("Image",profile.Image);
+            } else {
+                //here should be done logic for log out because that mean that this user does not exists on out City Scrumble Server database I guess
             }
         }
 

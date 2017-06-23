@@ -1,0 +1,2 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"><item><color android:color="@color/infusion_blue" /></item><item><bitmap android:src="@drawable/cityscramblelogo" android:tileMode="disabled" android:gravity="center" />--&gt;
+  </item></layer-list>
